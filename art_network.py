@@ -134,4 +134,4 @@ class ART:
         for i in range(self.num_committed_neurons):
             if self.committed_neurons[i]:
                 prototypes.append((i, self.U[i, :]))
-        return prototypes
+        return prototypes 

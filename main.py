@@ -49,9 +49,6 @@ class App:
 
         btn_reset = ttk.Button(controls_frame, text="Resetear Red", command=self.reset_network)
         btn_reset.pack(fill=tk.X, pady=20)
-        
-        self.status_label = ttk.Label(controls_frame, text="Cargue una imagen o dibuje un patrón.", wraplength=230)
-        self.status_label.pack(fill=tk.X, pady=10, side=tk.BOTTOM)
 
         original_frame = ttk.LabelFrame(images_frame, text="Imagen Original")
         original_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5, pady=5)
@@ -146,7 +143,6 @@ class App:
         if 0 <= r < self.grid_size and 0 <= c < self.grid_size:
             self.current_pattern[r, c] = 1 - self.current_pattern[r, c]
             self._draw_grid()
-            self.status_label.config(text="Patrón modificado manualmente.")
 
     def _display_image(self, label, image_pil, max_size=(300, 300)):
         if image_pil is None:
@@ -181,15 +177,12 @@ class App:
         
         original_image = Image.open(self.image_path)
         self._display_image(self.lbl_original_image, original_image)
-        
-        self.status_label.config(text=f"Imagen cargada en la cuadrícula.")
 
     def update_vigilance(self, value):
         val = round(float(value), 1)
         self.vigilance.set(val)
         self.art_net.set_vigilance(val)
         self.vigilance_label.config(text=f"{val:.1f}")
-        self.status_label.config(text=f"Vigilancia actualizada a: {val:.1f}")
 
     def _get_flat_pattern(self):
         if self.current_pattern is None:
@@ -206,7 +199,6 @@ class App:
 
         if neuron_index == -1:
             msg = "No hay más neuronas disponibles en la red."
-            self.status_label.config(text="Estado: Red llena.")
         elif is_new:
             msg = f"Nuevo patrón aprendido.\nAlmacenado en la Neurona #{neuron_index + 1}."
             self._update_learned_patterns_display()
@@ -214,7 +206,6 @@ class App:
             msg = f"El patrón coincide con uno existente.\nCategoría reconocida: Neurona #{neuron_index + 1}."
         
         messagebox.showinfo("Resultado del Entrenamiento", msg)
-        self.status_label.config(text=msg.replace('\n', ' '))
 
 
     def test_pattern(self):
@@ -231,7 +222,6 @@ class App:
             msg = "El patrón no coincide con ninguna categoría aprendida."
         
         messagebox.showinfo("Resultado de la Prueba", msg)
-        self.status_label.config(text=msg)
 
 
     def reset_network(self):
@@ -241,7 +231,6 @@ class App:
             self._draw_grid()
             self._display_image(self.lbl_original_image, None)
             self._update_learned_patterns_display()
-            self.status_label.config(text="Estado: Red reseteada.")
             messagebox.showinfo("Información", "La red ha sido reseteada a su estado inicial.")
 
 if __name__ == "__main__":
